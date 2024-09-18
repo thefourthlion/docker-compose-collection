@@ -1,0 +1,29 @@
+services:
+  nextcloud:
+    image: nextcloud
+    restart: always
+    container_name: nextcloud
+    ports:
+      - 80:80
+    links:
+      - nextcloud_db
+    volumes:
+      - nextcloud:/var/www/html
+
+  nextcloud_db:
+    image: mariadb
+    container_name: nextcloud_db
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+    volumes:
+      - nextcloud_db:/var/lib/mysql
+
+volumes:
+  nextcloud:
+  nextcloud_db:

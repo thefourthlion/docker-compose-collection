@@ -1,0 +1,32 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    ports:
+      - "88:80"
+    environment:
+      WEBSOCKET_ENABLED: "true"
+      DATABASE_URL: "postgresql://admin:${VAULT_DB_PASSWORD}@db:5432/vaultwarden"
+      ADMIN_TOKEN: "${ADMIN_TOKEN}"
+      DOMAIN: "https://vault.gosnc.net/"
+      SIGNUPS_ALLOWED: "false"
+    volumes:
+      - vaultwarden_data:/data
+
+  db:
+    image: postgres:13-alpine
+    container_name: vaultwarden_db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: vaultwarden
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: ${VAULT_DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  vaultwarden_data:
+  postgres_data:
