@@ -1,0 +1,16 @@
+services:
+  syncthing:
+    image: syncthing/syncthing:latest
+    container_name: syncthing
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK_SET=022
+    volumes:
+      - ./config:/var/syncthing/config
+      - /C/Users/Iron Sword/Obsidian Vault:/var/syncthing/data
+    ports:
+      - "8384:8384"    # Web GUI
+      - "22000:22000"  # Syncing port
+      - "21027:21027/udp"  # Local discovery
+    restart: unless-stopped

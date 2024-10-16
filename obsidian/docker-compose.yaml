@@ -1,0 +1,19 @@
+services:
+  obsidian:
+    image: lscr.io/linuxserver/obsidian:latest
+    container_name: obsidian
+    security_opt:
+      - seccomp:unconfined # Optional, necessary for certain features
+    environment:
+      - PUID=1000      # Replace with your user ID (check with `id` command)
+      - PGID=1000      # Replace with your group ID (check with `id` command)
+      - TZ=Etc/UTC     # Replace with your timezone, e.g., "America/Los_Angeles"
+    volumes:
+      - /path/to/config:/config  # Replace with the actual path where you want to store config
+    ports:
+      - 3030:3000   # HTTP port
+      - 3031:3001   # HTTPS port
+    shm_size: "1gb" # Required for Electron apps like Obsidian
+    restart: unless-stopped
+
+ 
