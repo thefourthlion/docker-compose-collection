@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  radius:
+    image: freeradius/freeradius-server:latest
+    container_name: freeradius
+    ports:
+      - "1812:1812/udp"   
+      - "1813:1813/udp"  
+    volumes:
+      - ./freeradius/clients.conf:/etc/freeradius/3.0/clients.conf
+      - ./freeradius/users:/etc/freeradius/3.0/users
+      - ./freeradius/mods-enabled:/etc/freeradius/3.0/mods-enabled
+    environment:
+      - RADIUS_DB_HOST=mariadb
+      - RADIUS_DB_USER=radius
+      - RADIUS_DB_PASSWORD=radiuspassword
+      - RADIUS_DB_NAME=radius
+    depends_on:
+      - mariadb
+    networks:
+      - radius_network
+
+  mariadb:
+    image: mariadb:latest
+    container_name: radius-mariadb
+    ports:
+      - "3306:3306"
+    volumes:
+      - radius-db-/mysql
+      - ./mariadb/init:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=radius
+      - MYSQL_USER=radius
+      - MYSQL_PASSWORD=radiuspassword
+    networks:
+      - radius_network
+
+  # Optional: phpMyAdmin for database management
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: radius-phpmyadmin
+    environment:
+      - PMA_HOST=mariadb
+      - PMA_PORT=3306
+    ports:
+      - "8080:80"
+    depends_on:
+      - mariadb
+    networks:
+      - radius_network
+
+networks:
+  radius_network:
+    driver: bridge
+
+volumes:
+  radius-db-data:

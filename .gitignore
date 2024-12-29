@@ -1,5 +1,7 @@
 /ghost/ghost_content
 /ghost/mysql_data
 /ghost/.env
-
+/openwebui-ollama/.env
 /syncthing/config
+/mariadb/mariadb_data
+/radius/mariadb

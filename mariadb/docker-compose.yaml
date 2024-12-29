@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=SdjcE0101    
+      - MYSQL_DATABASE=ispaio         
+      - MYSQL_USER=ispaio                       
+      - MYSQL_PASSWORD=SdjcE0101             
+    volumes:
+      - ./mariadb_data:/var/lib/mysql             
+    ports:
+      - "3307:3306"                              
+    networks:
+      - mariadb_network
+
+networks:
+  mariadb_network:
+    driver: bridge
+
+volumes:
+  mariadb_data:
