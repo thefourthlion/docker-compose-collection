@@ -3,5 +3,5 @@
 /ghost/.env
 /openwebui-ollama/.env
 /syncthing/config
-/mariadb/mariadb_data
-/radius/mariadb
+./mariadb/mariadb_data
+./radius/mariadb
